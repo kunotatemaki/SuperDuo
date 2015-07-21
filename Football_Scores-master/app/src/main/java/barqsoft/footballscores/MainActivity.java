@@ -75,3 +75,6 @@ public class MainActivity extends ActionBarActivity
         super.onRestoreInstanceState(savedInstanceState);
     }
 }
+
+
+//http://developer.android.com/guide/topics/appwidgets/index.html#MetaData
