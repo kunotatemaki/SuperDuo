@@ -14,7 +14,8 @@
             android:text="@string/test_text"
             android:textColor="@android:color/black"
             android:textSize="@dimen/League"
-            android:id="@+id/league_textview"/>
+            android:id="@+id/league_textview"
+            android:contentDescription="@string/league_name"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,7 +24,8 @@
             android:text="@string/test_text"
             android:textSize="@dimen/League"
             android:textColor="@android:color/black"
-            android:id="@+id/matchday_textview"/>
+            android:id="@+id/matchday_textview"
+            android:contentDescription="@string/matchday_text"/>
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
@@ -40,6 +42,8 @@
         android:drawableStart="@android:drawable/ic_menu_share"
         android:paddingLeft="120dp"
         android:paddingRight="120dp"
+        android:paddingStart="120dp"
+        android:paddingEnd="120dp"
         android:contentDescription="@string/share_button"/>
     </FrameLayout>
 

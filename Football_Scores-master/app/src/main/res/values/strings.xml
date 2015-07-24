@@ -37,4 +37,10 @@
     <string name="home_crest">Home team crest</string>
     <string name="away_crest">Visitor team crest</string>
     <string name="share_button">Button for sharing this score</string>
+    <string name="league_name">Name of the league</string>
+    <string name="description_application">Description of the application</string>
+    <string name="home_name">Name of the home team</string>
+    <string name="score">score of the match</string>
+    <string name="time_match">Time of the match</string>
+    <string name="visitor_name">Name of the visitor</string>
 </resources>
