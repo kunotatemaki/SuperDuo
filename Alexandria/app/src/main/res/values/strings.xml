@@ -12,7 +12,7 @@
     <string name="action_settings">Settings</string>
     <string name="scan_button">Scan</string>
     <string name="input_hint_isbn13">13 digits, only numbers.</string>
-    <string name="input_hint_isbn10">10 digits. Last one can be X</string>
+    <string name="input_hint_isbn10">Only first 9 digits are needed</string>
     <string name="book_cover">Bookcover</string>
 
     <string name="ok_button">Next</string>

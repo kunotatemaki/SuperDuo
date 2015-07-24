@@ -10,7 +10,7 @@
     <dimen name="vertical_page_margin">@dimen/margin_medium</dimen>
 
     <integer name="ean_size_isbn13">13</integer>
-    <integer name="ean_size_isbn10">10</integer>
+    <integer name="ean_size_isbn10">9</integer>
     <integer name="ean_width">8</integer>
     <dimen name="head_line">24sp</dimen>
     <dimen name="small_fontsize">12sp</dimen>
