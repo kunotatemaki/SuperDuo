@@ -30,7 +30,6 @@ public class FootballWidgetService extends RemoteViewsService {
 }
 
 class FootballRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-    private static final int mCount = 10;
     private List<WidgetItem> mWidgetItems = new ArrayList<>();
     private Context mContext;
     private int mAppWidgetId;
@@ -42,46 +41,34 @@ class FootballRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
     }
 
     public void onCreate() {
-        // In onCreate() you setup any connections / cursors to your data source. Heavy lifting,
-        // for example downloading or creating content etc, should be deferred to onDataSetChanged()
-        // or getViewAt(). Taking more than 20 seconds in this call will result in an ANR.
-    /*    for (int i = 0; i < mCount; i++) {
-            mWidgetItems.add(new WidgetItem(i + "!"));
-        }
-*/
-        ContentResolver cr = mContext.getContentResolver();
-        String[] fragmentdate = new String[1];
 
-        Date dFragmentdate = new Date(System.currentTimeMillis());
+        //get data from content provider
+        ContentResolver cr = mContext.getContentResolver();
+        String[] fragmentDate = new String[1];
+
+        Date dFragmentDate = new Date(System.currentTimeMillis());
         SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
-        fragmentdate[0] = mformat.format(dFragmentdate);
-        //Hacemos la consulta
+        fragmentDate[0] = mformat.format(dFragmentDate);
+        //get data from database
         Cursor cursor = cr.query(DatabaseContract.scores_table.buildScoreWithDate(),
-                null, //Columnas a devolver
-                null,       //Condición de la query
-                fragmentdate,       //Argumentos variables de la query
-                null);      //Orden de los resultados
+                null, //Columns
+                null,       //Conditions
+                fragmentDate,       //Arguments
+                null);      //Order
 
         if (cursor.moveToFirst())
         {
-            WidgetItem item = new WidgetItem();
             do
             {
+                WidgetItem item = new WidgetItem();
                 item.home_name = cursor.getString(scoresAdapter.COL_HOME);
-                item.home_name = cursor.getString(scoresAdapter.COL_AWAY);
-                item.home_name = Utilies.getScores(cursor.getInt(scoresAdapter.COL_HOME_GOALS), cursor.getInt(scoresAdapter.COL_AWAY_GOALS));
-
+                item.away_name = cursor.getString(scoresAdapter.COL_AWAY);
+                item.score = Utilies.getScores(cursor.getInt(scoresAdapter.COL_HOME_GOALS), cursor.getInt(scoresAdapter.COL_AWAY_GOALS));
+                mWidgetItems.add(item);
 
             } while (cursor.moveToNext());
         }
-        // We sleep for 3 seconds here to show how the empty view appears in the interim.
-        // The empty view is set in the StackWidgetProvider and should be a sibling of the
-        // collection view.
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void onDestroy() {
@@ -91,7 +78,7 @@ class FootballRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
     }
 
     public int getCount() {
-        return mCount;
+        return mWidgetItems.size();
     }
 
     public RemoteViews getViewAt(int position) {
@@ -106,22 +93,10 @@ class FootballRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
         // Next, we set a fill-intent which will be used to fill-in the pending intent template
         // which is set on the collection view in StackWidgetProvider.
-        /*Bundle extras = new Bundle();
-        extras.putInt(FootballWidgetProvider.EXTRA_ITEM, position);
         Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
-        rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);*/
+        rv.setOnClickFillInIntent(R.id.scores_widget_item, fillInIntent);
 
-        // You can do heaving lifting in here, synchronously. For example, if you need to
-        // process an image, fetch something from the network, etc., it is ok to do it here,
-        // synchronously. A loading view will show up in lieu of the actual contents in the
-        // interim.
-        try {
-            System.out.println("Loading view " + position);
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
 
         // Return the remote views object.
         return rv;
