@@ -1,5 +1,6 @@
 package it.jaschke.alexandria;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import it.jaschke.alexandria.api.Callback;
+import it.jaschke.alexandria.services.BookService;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, Callback {
@@ -38,9 +40,31 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
     public static final String MESSAGE_EVENT = "MESSAGE_EVENT";
     public static final String MESSAGE_KEY = "MESSAGE_EXTRA";
 
+
+    protected class SetConnectionListener extends BroadcastReceiver {
+
+        final Activity activity;
+
+        SetConnectionListener(Activity _activity){
+            this.activity = _activity;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(BookService.SET_NO_CONNECTION_ACTION_INTENT)) {
+                String msg = intent.getExtras().getString(BookService.SET_NO_CONNECTION_ACTION_MSG);
+                Toast toast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+    }
+    private SetConnectionListener setConnectionListener;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setConnectionListener = new SetConnectionListener(this);
         IS_TABLET = isTablet();
         if(IS_TABLET){
             setContentView(R.layout.activity_main_tablet);
@@ -179,6 +203,18 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerF
         super.onBackPressed();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        registerReceiver(setConnectionListener, new IntentFilter(BookService.SET_NO_CONNECTION_ACTION_INTENT));
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        unregisterReceiver(setConnectionListener);
+
+    }
 
 
 }

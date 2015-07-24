@@ -2,8 +2,11 @@ package it.jaschke.alexandria.services;
 
 import android.app.IntentService;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -32,6 +35,8 @@ import it.jaschke.alexandria.data.AlexandriaContract;
 public class BookService extends IntentService {
 
     private final String LOG_TAG = BookService.class.getSimpleName();
+    public static final String SET_NO_CONNECTION_ACTION_INTENT = "it.jaschke.alexandria.services.SET_NO_CONNECTION_ACTION_INTENT";
+    public static final String SET_NO_CONNECTION_ACTION_MSG = "it.jaschke.alexandria.services.SET_NO_CONNECTION_ACTION_MSG";
 
     public static final String FETCH_BOOK = "it.jaschke.alexandria.services.action.FETCH_BOOK";
     public static final String DELETE_BOOK = "it.jaschke.alexandria.services.action.DELETE_BOOK";
@@ -93,6 +98,23 @@ public class BookService extends IntentService {
         }
 
         bookEntry.close();
+
+        //Check if there is internet connection
+        ConnectivityManager cm =
+                (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if(!isConnected){
+            //tell the activity there is no book
+            Intent noConnection = new Intent();
+            noConnection.setAction(SET_NO_CONNECTION_ACTION_INTENT);
+            noConnection.putExtra(SET_NO_CONNECTION_ACTION_MSG, getResources().getString(R.string.no_connection));
+
+            sendBroadcast(noConnection);
+            return;
+        }
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;

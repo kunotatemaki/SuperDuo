@@ -44,4 +44,5 @@
     <string name="only_x">check digit must be a number or an X</string>
     <string name="add_isbn">Added _type_: _isbn_</string>
     <string name="operation_canceled">Operation canceled</string>
+    <string name="no_connection">There is no connection to Internet</string>
 </resources>
